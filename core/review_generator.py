@@ -38,14 +38,27 @@ class ReviewGenerator:
     # Public API
     # ------------------------------------------------------------------
 
+    # Token budget: keep every prompt under ~1 700 chars (~425 tokens) so
+    # the full 4-call pipeline stays comfortably inside the 7 000 TPM limit.
+    _MAX_HISTORY_ITEMS  = 6    # interactions shown in persona summary
+    _MAX_SNIPPET        = 55   # chars of review text per history line
+    _MAX_PERSONA_SUM    = 350  # persona summary forwarded to later prompts
+    _MAX_RELEVANT_ITEMS = 4    # items in the relevant-history block
+    _MAX_PRODUCT_DESC   = 280  # product description
+    _MAX_METADATA       = 140  # str(product.metadata)
+    _MAX_CONTEXT        = 130  # context string
+    _MAX_REASONING      = 550  # reasoning JSON forwarded to review gen
+    _MAX_PREFS          = 130  # current_preferences in mindset update
+
     def generate_review(self, request: ReviewRequest) -> ReviewOutput:
         history = request.persona.interaction_history
 
         # ── Step 1: persona summary (plain text) ───────────────────────
+        recent = history[-self._MAX_HISTORY_ITEMS:] if history else []
         history_text = "\n".join(
             f"- {i.item_title} ({i.item_category}): {i.rating_given}/5"
-            f" — '{i.review_text[:100]}...'"
-            for i in history
+            f" — '{i.review_text[:self._MAX_SNIPPET]}'"
+            for i in recent
         ) or "No prior reviews."
 
         persona_summary: str = (
@@ -62,16 +75,20 @@ class ReviewGenerator:
             "neuroticism": request.persona.personality.neuroticism,
             "interaction_history_text": history_text,
         })
+        persona_summary = persona_summary[:self._MAX_PERSONA_SUM]
 
         # ── Step 2: relevant history + statistics ───────────────────────
         prior = compute_rating_prior(request.persona)
-        relevant = filter_relevant_memory(history, request.product.category)
+        relevant = filter_relevant_memory(
+            history, request.product.category,
+            max_items=self._MAX_RELEVANT_ITEMS,
+        )
         if not relevant:
             relevant = list(history)[-3:]
 
         relevant_text = "\n".join(
-            f"- {i.item_title}: {i.rating_given}/5 — '{i.review_text[:100]}'"
-            for i in relevant
+            f"- {i.item_title}: {i.rating_given}/5 — '{i.review_text[:self._MAX_SNIPPET]}'"
+            for i in relevant[:self._MAX_RELEVANT_ITEMS]
         ) or "No relevant history."
 
         avg_review_length = (
@@ -88,32 +105,34 @@ class ReviewGenerator:
             self.main_llm,
             {
                 "persona_summary": persona_summary,
-                "product_title": request.product.title,
-                "product_category": request.product.category,
-                "product_description": request.product.description,
-                "product_metadata": str(request.product.metadata),
+                "product_title": request.product.title[:80],
+                "product_category": request.product.category[:40],
+                "product_description": request.product.description[:self._MAX_PRODUCT_DESC],
+                "product_metadata": str(request.product.metadata)[:self._MAX_METADATA],
                 "relevant_history": relevant_text,
-                "context": context_str,
+                "context": context_str[:self._MAX_CONTEXT],
             },
         )
 
         # ── Step 4: review generation (JSON) ───────────────────────────
+        reasoning_compact = json.dumps(reasoning)[:self._MAX_REASONING]
+
         review_data: dict = self._safe_json_invoke(
             REVIEW_GENERATION_PROMPT,
             self.main_llm,
             {
                 "persona_summary": persona_summary,
-                "reasoning_json": json.dumps(reasoning, indent=2),
-                "product_title": request.product.title,
-                "product_category": request.product.category,
-                "avg_review_length": avg_review_length,
+                "reasoning_json": reasoning_compact,
+                "product_title": request.product.title[:80],
+                "product_category": request.product.category[:40],
+                "avg_review_length": min(avg_review_length, 120),
                 "conscientiousness": request.persona.personality.conscientiousness,
             },
         )
 
         # ── Step 5: mindset update (JSON) ──────────────────────────────
         current_prefs = (
-            str(request.persona.inferred_preferences)
+            str(request.persona.inferred_preferences)[:self._MAX_PREFS]
             if request.persona.inferred_preferences
             else "No prior preferences recorded"
         )

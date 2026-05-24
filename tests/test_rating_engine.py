@@ -9,10 +9,6 @@ from core.rating_engine import (
 from models.schemas import PastInteraction, PersonalityTraits, UserPersona
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
 def _personality():
     return PersonalityTraits(openness=2, conscientiousness=2, extraversion=2,
                              agreeableness=2, neuroticism=2)
@@ -32,9 +28,7 @@ def _make_persona(ratings, categories=None, word_counts=None):
     word_counts = word_counts or [10] * len(ratings)
     interactions = [
         _make_interaction(
-            item_id=f"b{i}",
-            category=cat,
-            rating=r,
+            item_id=f"b{i}", category=cat, rating=r,
             review_text=" ".join(["word"] * wc),
         )
         for i, (r, cat, wc) in enumerate(zip(ratings, categories, word_counts))
@@ -43,10 +37,6 @@ def _make_persona(ratings, categories=None, word_counts=None):
                        personality=_personality(),
                        interaction_history=interactions)
 
-
-# ---------------------------------------------------------------------------
-# compute_rating_prior
-# ---------------------------------------------------------------------------
 
 class TestComputeRatingPrior:
     def test_empty_history_returns_defaults(self):
@@ -120,10 +110,6 @@ class TestComputeRatingPrior:
         assert dist["2"] == pytest.approx(0.0, abs=0.001)
 
 
-# ---------------------------------------------------------------------------
-# calibrate_rating
-# ---------------------------------------------------------------------------
-
 class TestCalibrateRating:
     def test_never_gives_5_caps_at_4_5(self):
         result = calibrate_rating(5.0, 4.0, 0.3, never_gives_5=True)
@@ -134,12 +120,10 @@ class TestCalibrateRating:
         assert result >= 1.5
 
     def test_regression_to_mean_pulls_low_rating_up(self):
-        # raw=1, hist_avg=4 → blended should be above 1
         result = calibrate_rating(1.0, 4.0, 0.5)
         assert result > 1.0
 
     def test_regression_to_mean_pulls_high_rating_down(self):
-        # raw=5, hist_avg=2 → blended should be below 5
         result = calibrate_rating(5.0, 2.0, 0.5)
         assert result < 5.0
 
@@ -175,14 +159,9 @@ class TestCalibrateRating:
             f"calibrate_rating({raw}) = {result} is not a 0.5 increment"
 
     def test_stable_input_unchanged_direction(self):
-        # When raw equals historical avg, result should be close to it
         result = calibrate_rating(3.0, 3.0, 0.5)
         assert result == pytest.approx(3.0, abs=0.5)
 
-
-# ---------------------------------------------------------------------------
-# compute_importance_score
-# ---------------------------------------------------------------------------
 
 class TestComputeImportanceScore:
     def test_category_match_adds_to_score(self):
@@ -211,14 +190,9 @@ class TestComputeImportanceScore:
 
     def test_base_score_always_present(self):
         i = _make_interaction(category="fiction", review_text="word")
-        # min score = 0.3 (base) + 0 (no cat match) + tiny engagement
         score = compute_importance_score(i, "mystery")
         assert score >= 0.3
 
-
-# ---------------------------------------------------------------------------
-# filter_relevant_memory
-# ---------------------------------------------------------------------------
 
 class TestFilterRelevantMemory:
     def test_empty_list_returns_empty(self):
@@ -241,20 +215,17 @@ class TestFilterRelevantMemory:
         assert len(results) <= 3
 
     def test_threshold_excludes_low_scoring_items(self):
-        # Short review + no category match → score ~0.3 (base only)
         interactions = [_make_interaction("b1", "mystery", 3.0, review_text="ok")]
         results = filter_relevant_memory(interactions, "fiction", threshold=0.8)
         assert results == []
 
     def test_recency_bonus_keeps_recent_items_at_top(self):
-        # 6 identical interactions except position; last 3 get +0.2 bonus
         interactions = [
             _make_interaction(f"b{i}", "fiction", 3.0, review_text=" ".join(["w"] * 10))
             for i in range(6)
         ]
         results = filter_relevant_memory(interactions, "fiction", threshold=0.3, max_items=6)
         result_ids = [r.item_id for r in results]
-        # Most recent 3 (b3, b4, b5) should appear
         assert "b5" in result_ids
         assert "b4" in result_ids
         assert "b3" in result_ids

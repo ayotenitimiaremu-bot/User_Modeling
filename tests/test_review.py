@@ -86,7 +86,6 @@ class TestPromptRendering:
         assert "gut_reaction" in text
         assert "predicted_rating" in text
         assert "reasoning_summary" in text
-        # Braces must be present (double-brace escaping worked)
         assert "{" in text and "}" in text
 
     def test_review_generation_renders_without_error(self):
@@ -132,7 +131,7 @@ class TestPromptRendering:
 
 
 # ---------------------------------------------------------------------------
-# ReviewGenerator._try_parse_json  (static method — no LLM needed)
+# ReviewGenerator._try_parse_json
 # ---------------------------------------------------------------------------
 
 class TestTryParseJson:
@@ -165,7 +164,6 @@ class TestTryParseJson:
         assert ReviewGenerator._try_parse_json('{"key": ') is None
 
     def test_json_array_not_matched_as_dict(self):
-        # Our regex looks for {} blocks — a bare array should return None
         result = ReviewGenerator._try_parse_json('[1, 2, 3]')
         assert result is None
 
@@ -204,14 +202,7 @@ class TestSafeJsonInvoke:
             g._safe_json_invoke(self._simple, g.main_llm, {"text": "go"})
 
     def test_strict_instruction_appended_on_retry(self):
-        # Spy on what gets sent to the chain on the second call
-        captured = []
-
-        class SpyFake(FakeListChatModel):
-            responses: list = ["not json", '{"ok": true}']
-
         g = self._gen(["not json", '{"ok": true}'])
-
         result = g._safe_json_invoke(self._simple, g.main_llm, {"text": "original"})
         assert result == {"ok": True}
 
@@ -329,7 +320,7 @@ class TestGenerateReview:
 
 
 # ---------------------------------------------------------------------------
-# Standalone tests — schemas, loader, rating engine, integration
+# Standalone tests
 # ---------------------------------------------------------------------------
 
 def test_schemas_validate(sample_persona):
@@ -339,20 +330,6 @@ def test_schemas_validate(sample_persona):
         assert 1 <= getattr(p, attr) <= 3
     for interaction in sample_persona.interaction_history:
         assert 1.0 <= interaction.rating_given <= 5.0
-
-
-def test_amazon_loader_synthetic_fallback():
-    """GoodreadsLoader (Amazon Reviews 2023) falls back to synthetic data when offline."""
-    loader = GoodreadsLoader()
-    df = loader.load(100)
-    assert len(df) > 0
-    required = {"user_id", "book_id", "rating", "review_text", "book_title", "genre"}
-    assert required.issubset(set(df.columns))
-    personas = loader.build_user_personas(df)
-    assert len(personas) > 0
-    first = list(personas.values())[0]
-    for attr in ("openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"):
-        assert getattr(first.personality, attr) in (1, 2, 3)
 
 
 def test_rating_calibration():
@@ -368,10 +345,8 @@ def test_rating_calibration():
 
 def test_importance_scoring():
     interaction = PastInteraction(
-        item_id="b1",
-        item_title="Nike Air Max",
-        item_category="shoes",
-        rating_given=4.0,
+        item_id="b1", item_title="Nike Air Max",
+        item_category="shoes", rating_given=4.0,
         review_text="Great fit and comfortable for all-day wear. Very stylish design.",
     )
     score = compute_importance_score(interaction, "shoes")

@@ -1,7 +1,7 @@
 """
 Integration tests — hit the real Groq API and LangSmith tracing.
 Run with:  pytest tests/test_integration.py -v
-Skip with: pytest tests/ -v -m "not integration"
+Skip with: pytest tests/ -m "not integration"
 """
 import pytest
 
@@ -17,11 +17,6 @@ from models.schemas import (
 
 pytestmark = pytest.mark.integration
 
-
-# ---------------------------------------------------------------------------
-# Module-scoped fixtures — one ReviewGenerator instance, one API call for
-# the standard pipeline tests
-# ---------------------------------------------------------------------------
 
 @pytest.fixture(scope="module")
 def generator():
@@ -79,10 +74,6 @@ def review_result(generator, base_persona, self_help_product):
     return generator.generate_review(ReviewRequest(persona=base_persona, product=self_help_product))
 
 
-# ---------------------------------------------------------------------------
-# TestFullPipeline — verifies the 6-step pipeline produces a valid output
-# ---------------------------------------------------------------------------
-
 class TestFullPipeline:
     def test_returns_review_output_type(self, review_result):
         assert isinstance(review_result, ReviewOutput)
@@ -110,10 +101,6 @@ class TestFullPipeline:
         assert len(review_result.mindset_update.strip()) > 0
 
 
-# ---------------------------------------------------------------------------
-# TestPersonaBehavior — one call each, tests different persona edge cases
-# ---------------------------------------------------------------------------
-
 class TestPersonaBehavior:
     @staticmethod
     def _persona(ratings, uid):
@@ -125,9 +112,7 @@ class TestPersonaBehavior:
             for i, r in enumerate(ratings)
         ]
         return UserPersona(
-            user_id=uid,
-            age=30,
-            occupation="teacher",
+            user_id=uid, age=30, occupation="teacher",
             personality=PersonalityTraits(
                 openness=2, conscientiousness=2, extraversion=2,
                 agreeableness=2, neuroticism=2,
@@ -136,10 +121,9 @@ class TestPersonaBehavior:
         )
 
     @staticmethod
-    def _product(uid="mindset"):
+    def _product():
         return ProductDetails(
-            product_id=f"p_{uid}",
-            title="Mindset",
+            product_id="p_mindset", title="Mindset",
             category="self-help",
             description="The new psychology of success by Carol Dweck.",
             metadata={"author": "Carol Dweck", "pages": 288},
@@ -165,17 +149,14 @@ class TestPersonaBehavior:
 
     def test_empty_history_does_not_crash(self, generator):
         persona = UserPersona(
-            user_id="no_history_user",
-            age=22,
-            occupation="student",
+            user_id="no_history_user", age=22, occupation="student",
             personality=PersonalityTraits(
                 openness=2, conscientiousness=2, extraversion=2,
                 agreeableness=2, neuroticism=2,
             ),
         )
         product = ProductDetails(
-            product_id="p_sapiens",
-            title="Sapiens",
+            product_id="p_sapiens", title="Sapiens",
             category="history",
             description="A brief history of humankind.",
             metadata={"author": "Yuval Noah Harari", "pages": 443},

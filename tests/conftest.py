@@ -3,14 +3,14 @@ import sys
 
 import pytest
 
-# Ensure project root is on the path regardless of how pytest is invoked.
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 
 def pytest_configure(config):
     config.addinivalue_line(
-        "markers", "integration: mark test as an integration test (calls real APIs)"
+        "markers", "integration: mark test as an integration test (calls real APIs or network)"
     )
+
 
 from models.schemas import (
     PastInteraction,
@@ -44,16 +44,11 @@ def past_interaction():
 @pytest.fixture
 def persona(personality):
     rows = [
-        ("self-help", 4.5,
-         "Very practical and well written. Clear advice throughout the whole book."),
-        ("self-help", 4.0,
-         "Good read. Solid takeaways worth implementing right away."),
-        ("fiction", 3.5,
-         "Decent story. Some slow parts but overall enjoyable enough for the weekend."),
-        ("history", 4.0,
-         "Fascinating perspective. Well researched and surprisingly accessible."),
-        ("fiction", 3.0,
-         "Average. Had real potential but did not fully deliver in the end unfortunately."),
+        ("self-help", 4.5, "Very practical and well written. Clear advice throughout the whole book."),
+        ("self-help", 4.0, "Good read. Solid takeaways worth implementing right away."),
+        ("fiction",   3.5, "Decent story. Some slow parts but overall enjoyable enough for the weekend."),
+        ("history",   4.0, "Fascinating perspective. Well researched and surprisingly accessible."),
+        ("fiction",   3.0, "Average. Had real potential but did not fully deliver in the end unfortunately."),
     ]
     interactions = [
         PastInteraction(
@@ -90,10 +85,6 @@ def product():
 def review_request(persona, product):
     return ReviewRequest(persona=persona, product=product)
 
-
-# ---------------------------------------------------------------------------
-# sample_* fixtures — 30yo accountant, Deep Work product
-# ---------------------------------------------------------------------------
 
 @pytest.fixture
 def sample_persona():

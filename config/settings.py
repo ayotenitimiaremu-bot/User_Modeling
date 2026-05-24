@@ -12,8 +12,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=str(_ENV_FILE), env_file_encoding="utf-8", extra="ignore")
 
     GROQ_API_KEY: str
-    MAIN_MODEL: str = "llama-3.3-70b-versatile"
-    FAST_MODEL: str = "llama-3.1-8b-instant"
+    TAVILY_API_KEY: str
+    MAIN_MODEL: str = "openai/gpt-oss-120b"
+    FAST_MODEL: str = "openai/gpt-oss-120b"
 
     # LangSmith tracing
     LANGCHAIN_TRACING_V2: str = "false"
