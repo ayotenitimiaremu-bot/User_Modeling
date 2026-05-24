@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nigerian Product Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="index.html" class="topbar-brand">
+        <span class="flag">🇳🇬</span>
+        <span class="name">Nigerian Product Search</span>
+      </a>
+      <span class="topbar-divider"></span>
+      <span class="topbar-tagline">Compare prices across Nigerian markets</span>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="sep">›</span>
+        <span class="current">Product Search</span>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+
+      <form id="searchForm" novalidate>
+
+        <div class="section-card">
+          <div class="section-card-header">
+            <span class="title">Search Parameters</span>
+          </div>
+          <div class="section-card-body">
+            <div class="form-grid">
+
+              <div class="form-group form-group--full">
+                <label class="field-label" for="query">Product name or description</label>
+                <input
+                  type="text"
+                  id="query"
+                  name="query"
+                  placeholder="Samsung Galaxy A55, HP laptop…"
+                  autocomplete="off"
+                />
+                <span class="field-error" id="query-error"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label">Budget minimum (₦)</label>
+                <input type="text" id="budget_min" name="budget_min" placeholder="0" inputmode="numeric" />
+                <span class="field-error" id="budget_min-error"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="field-label">Budget maximum (₦)</label>
+                <input type="text" id="budget_max" name="budget_max" placeholder="0" inputmode="numeric" />
+                <span class="field-error" id="budget_max-error"></span>
+              </div>
+
+              <div class="form-group form-group--full">
+                <label class="field-label" for="location">Delivery location</label>
+                <div class="select-wrap">
+                  <select id="location" name="location">
+                    <option value="" disabled selected>Select a city</option>
+                    <option value="Lagos">Lagos</option>
+                    <option value="Abuja">Abuja (FCT)</option>
+                    <option value="Port Harcourt">Port Harcourt</option>
+                    <option value="Ibadan">Ibadan</option>
+                    <option value="Kano">Kano</option>
+                    <option value="Enugu">Enugu</option>
+                    <option value="Benin City">Benin City</option>
+                    <option value="Ede">Ede, Osun State</option>
+                  </select>
+                </div>
+                <span class="field-error" id="location-error"></span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-header">
+            <span class="title">Search Filters</span>
+          </div>
+          <div class="section-card-body">
+            <div class="checkbox-row">
+              <label class="check-pill">
+                <input type="checkbox" name="priorities" value="avoid_scams" checked />
+                <span>Scam detection</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" name="priorities" value="cheapest_price" />
+                <span>Lowest price</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" name="priorities" value="verified_seller" />
+                <span>Verified sellers only</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" name="priorities" value="fast_delivery" />
+                <span>Fast delivery</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary" id="submitBtn">
+            <div class="spinner"></div>
+            <span class="btn-text">Run Search</span>
+          </button>
+          <button type="reset" class="btn btn--secondary">Clear</button>
+          <div class="error-box" id="errorBox"></div>
+        </div>
+
+      </form>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-inner">
+      <p>Nigerian Product Search &nbsp;·&nbsp; Data updated daily &nbsp;·&nbsp; Not affiliated with any marketplace</p>
+      <p>For demonstration purposes only</p>
+    </div>
+  </footer>
+
+</div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-card">
+    <div class="loading-spinner-lg"></div>
+    <div class="loading-title">Searching across markets…</div>
+    <div class="loading-sub">Analyzing prices and detecting scams</div>
+    <div class="loading-steps">
+      <div class="load-step" id="step-jumia"><span class="step-icon"></span>Checking Jumia</div>
+      <div class="load-step" id="step-konga"><span class="step-icon"></span>Checking Konga</div>
+      <div class="load-step" id="step-jiji" ><span class="step-icon"></span>Checking Jiji</div>
+      <div class="load-step" id="step-scam" ><span class="step-icon"></span>Detecting scams</div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

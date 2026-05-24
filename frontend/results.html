@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Results — Nigerian Product Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="index.html" class="topbar-brand">
+        <span class="flag">🇳🇬</span>
+        <span class="name">Nigerian Product Search</span>
+      </a>
+      <span class="topbar-divider"></span>
+      <span class="topbar-tagline">Compare prices across Nigerian markets</span>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="sep">›</span>
+        <a href="index.html">Product Search</a>
+        <span class="sep">›</span>
+        <span class="current">Results</span>
+      </div>
+      <div style="display:flex;gap:.5rem">
+        <a href="index.html" class="btn btn--secondary" style="font-size:.75rem;padding:.3rem .75rem">← New search</a>
+        <button class="btn btn--secondary" id="shareBtn" style="font-size:.75rem;padding:.3rem .75rem">Copy link</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="container container--full">
+
+      <div class="results-bar">
+        <div class="query-info">
+          <div class="label">Search query</div>
+          <div class="value" id="resultsTitle">—</div>
+        </div>
+        <div class="meta" id="resultsSubtitle"></div>
+      </div>
+
+      <div class="savings-banner" id="savingsBanner">
+        <span class="save-icon">💰</span>
+        <span class="save-text">You could save <strong><span id="savingsAmount"></span></strong> by choosing the verified listing over the cheapest flagged one.</span>
+      </div>
+
+      <div id="priceComparison"></div>
+
+      <!-- Safe listings -->
+      <div class="result-table">
+        <div class="result-table-header">
+          <span class="section-label">Safe listings</span>
+          <span class="count-badge count-badge--green" id="safeCount">0</span>
+        </div>
+        <div id="safeList">
+          <div class="empty-state">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Flagged listings -->
+      <div class="result-table">
+        <div class="result-table-header">
+          <span class="section-label">Flagged / scam risk</span>
+          <span class="count-badge count-badge--red" id="scamCount">0</span>
+        </div>
+        <div id="scamList">
+          <div class="empty-state">Loading…</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-inner">
+      <p>Nigerian Product Search &nbsp;·&nbsp; Data updated daily &nbsp;·&nbsp; Not affiliated with any marketplace</p>
+      <p>For demonstration purposes only</p>
+    </div>
+  </footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
