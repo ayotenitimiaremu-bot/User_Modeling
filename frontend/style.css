@@ -33,7 +33,12 @@
   --shadow:       0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
 }
 
-html { font-size: 15px; }
+html { font-size: 15px; scroll-behavior: smooth; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 body {
   background: var(--bg);
@@ -218,7 +223,7 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background .15s, box-shadow .15s, transform .1s;
+  transition: background .2s, box-shadow .2s, color .2s, transform .15s;
   text-decoration: none;
   white-space: nowrap;
   letter-spacing: -.01em;
@@ -255,7 +260,7 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   text-decoration: none;
   border: none;
   cursor: pointer;
-  transition: background .12s;
+  transition: background .2s, color .2s;
   font-family: 'Inter', sans-serif;
 }
 .btn--card-primary:hover { background: var(--blue-hover); }
@@ -269,7 +274,7 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background .12s;
+  transition: background .2s, color .2s;
   font-family: 'Inter', sans-serif;
 }
 .btn--card-ghost:hover { background: var(--surface); }
@@ -283,7 +288,7 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   border: 1px solid var(--red-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background .12s;
+  transition: background .2s, color .2s;
   font-family: 'Inter', sans-serif;
 }
 .btn--card-danger:hover { background: #fde8e8; }
@@ -460,7 +465,10 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   margin-bottom: 1.25rem;
+  transition: box-shadow .2s;
 }
+
+.result-table:hover { box-shadow: var(--shadow); }
 
 .result-table-header {
   background: var(--surface);
@@ -484,11 +492,17 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   grid-template-columns: 10px 1fr auto;
   gap: .85rem;
   align-items: start;
-  transition: background .1s;
+  transition: background .2s;
+  animation: fadeIn .3s ease both;
 }
 
+.result-row:nth-child(2) { animation-delay: .06s; }
+.result-row:nth-child(3) { animation-delay: .12s; }
+.result-row:nth-child(4) { animation-delay: .18s; }
+.result-row:nth-child(5) { animation-delay: .24s; }
+
 .result-row:last-child { border-bottom: none; }
-.result-row:hover { background: #fafbff; }
+.result-row:hover { background: #f5f8ff; }
 
 .status-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: .5rem; flex-shrink: 0; }
 .status-dot--green { background: var(--green); }

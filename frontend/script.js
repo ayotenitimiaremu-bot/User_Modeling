@@ -227,6 +227,11 @@ function renderResults() {
          </div>`;
   }
 
+  requestAnimationFrame(() => {
+    const bar = document.querySelector('.results-bar');
+    if (bar) bar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
   if (!safe.length && !scams.length) {
     const safeEl = document.getElementById('safeList');
     if (safeEl) safeEl.innerHTML = `
