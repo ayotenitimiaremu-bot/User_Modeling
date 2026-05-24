@@ -1,34 +1,28 @@
-# ── Secrets ──────────────────────────────────────────────────────────────────
 .env
 .env.*
 *.pem
 *.key
 
-# ── Python bytecode & caches ─────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
 *.pyo
 .pytest_cache/
 
-# ── Virtual environments ─────────────────────────────────────────────────────
 .venv/
 venv/
 env/
 
-# ── IDE / Editor ─────────────────────────────────────────────────────────────
 .idea/
 .vscode/
 *.swp
 *.swo
 .DS_Store
 
-# ── Build / Distribution ──────────────────────────────────────────────────────
 dist/
 build/
 *.egg-info/
 
-# ── Coverage & test artefacts ─────────────────────────────────────────────────
 .coverage
 htmlcov/
 coverage.xml

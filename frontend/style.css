@@ -44,10 +44,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Shell ───────────────────────────────────────────── */
 .page { min-height: 100vh; display: flex; flex-direction: column; }
 
-/* ── Topbar ──────────────────────────────────────────── */
 .topbar {
   background: var(--chrome);
   height: 52px;
@@ -80,7 +78,6 @@ body {
 .topbar-divider { width: 1px; height: 16px; background: rgba(255,255,255,.18); flex-shrink: 0; }
 .topbar-tagline { font-size: .78rem; color: rgba(255,255,255,.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* ── Sub-header ──────────────────────────────────────── */
 .page-header {
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -107,12 +104,10 @@ body {
 .breadcrumb .sep { color: var(--text-light); }
 .breadcrumb .current { color: var(--text-sub); font-weight: 500; }
 
-/* ── Main ────────────────────────────────────────────── */
 main { flex: 1; padding: 2rem 1.5rem 3rem; }
 .container { max-width: 720px; margin: 0 auto; width: 100%; }
 .container--full { max-width: 1000px; }
 
-/* ── Form cards ──────────────────────────────────────── */
 .section-card {
   background: var(--white);
   border: 1px solid var(--border);
@@ -126,7 +121,6 @@ main { flex: 1; padding: 2rem 1.5rem 3rem; }
 .section-card-header .title { font-size: .8rem; font-weight: 600; color: var(--text-muted); }
 .section-card-body { padding: 1.25rem; }
 
-/* ── Form grid ───────────────────────────────────────── */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1.25rem; row-gap: 1.1rem; }
 .form-group { display: flex; flex-direction: column; }
 .form-group--full { grid-column: 1 / -1; }
@@ -180,7 +174,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   pointer-events: none;
 }
 
-/* ── Filter pills ────────────────────────────────────── */
 .checkbox-row { display: flex; flex-wrap: wrap; gap: .5rem; }
 
 .check-pill {
@@ -203,7 +196,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 .check-pill:has(input:checked) { background: var(--blue-soft); border-color: var(--blue); color: var(--blue); }
 .check-pill input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--blue); cursor: pointer; flex-shrink: 0; }
 
-/* ── Form actions ────────────────────────────────────── */
 .form-actions {
   display: flex;
   align-items: center;
@@ -215,7 +207,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   box-shadow: var(--shadow-sm);
 }
 
-/* ── Buttons ─────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -252,7 +243,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 }
 .btn--secondary:hover { background: var(--surface); }
 
-/* card-level action buttons */
 .card-actions { display: flex; gap: .4rem; margin-top: .75rem; flex-wrap: wrap; }
 
 .btn--card-primary {
@@ -298,17 +288,14 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 }
 .btn--card-danger:hover { background: #fde8e8; }
 
-/* ── Spinner ─────────────────────────────────────────── */
 .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .65s linear infinite; display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .btn--loading .spinner  { display: block; }
 .btn--loading .btn-text { display: none; }
 
-/* ── Error box ───────────────────────────────────────── */
 .error-box { display: none; background: var(--red-soft); border: 1px solid var(--red-border); border-radius: var(--radius-sm); padding: .5rem .85rem; font-size: .78rem; font-weight: 500; color: var(--red-text); }
 .error-box.visible { display: block; }
 
-/* ── Loading overlay ─────────────────────────────────── */
 .loading-overlay {
   display: none;
   position: fixed;
@@ -372,7 +359,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 .load-step.done { color: var(--text-sub); }
 .load-step.done .step-icon { background: var(--green); border-color: var(--green); color: #fff; }
 
-/* ── Results bar ─────────────────────────────────────── */
 .results-bar {
   background: var(--white);
   border: 1px solid var(--border);
@@ -390,7 +376,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 .results-bar .query-info .value { font-size: 1rem; font-weight: 600; color: var(--text); }
 .results-bar .meta { font-size: .8rem; color: var(--text-muted); }
 
-/* ── Savings banner (prominent) ──────────────────────── */
 .savings-banner {
   display: none;
   align-items: center;
@@ -415,7 +400,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 
 .savings-banner .save-text strong { font-size: 20px; }
 
-/* ── Price comparison ────────────────────────────────── */
 .price-comparison {
   background: var(--white);
   border: 1px solid var(--border);
@@ -469,7 +453,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 
 .pc-diff { font-size: .85rem; font-weight: 600; color: var(--text-sub); }
 
-/* ── Result table ────────────────────────────────────── */
 .result-table {
   background: var(--white);
   border: 1px solid var(--border);
@@ -494,7 +477,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 .count-badge--green { background: var(--green); }
 .count-badge--red   { background: var(--red); }
 
-/* ── Result rows ─────────────────────────────────────── */
 .result-row {
   border-bottom: 1px solid var(--border);
   padding: 1rem 1.25rem;
@@ -512,7 +494,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 .status-dot--green { background: var(--green); }
 .status-dot--red   { background: var(--red); }
 
-/* platform name + badge */
 .result-row .platform { font-size: .9rem; font-weight: 600; color: var(--text); margin-bottom: .15rem; display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; }
 
 .platform-badge {
@@ -531,7 +512,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 
 .result-row .detail-row { display: flex; flex-wrap: wrap; column-gap: 1.1rem; row-gap: .15rem; font-size: .75rem; color: var(--text-muted); }
 
-/* ── Trust indicator ─────────────────────────────────── */
 .trust-indicator { margin-top: .65rem; }
 
 .trust-bar-full {
@@ -552,7 +532,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 .trust-icon { font-size: .85rem; line-height: 1; }
 .trust-pct  { color: var(--text-muted); font-weight: 500; }
 
-/* ── Warning box ─────────────────────────────────────── */
 .warning-box {
   background: #fff5f5;
   border: 1px solid var(--red-border);
@@ -596,7 +575,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
   margin-top: .05rem;
 }
 
-/* ── Price column ────────────────────────────────────── */
 .price-col { text-align: right; min-width: 120px; }
 .price-col .price { font-size: 1.05rem; font-weight: 700; color: var(--text); display: block; margin-bottom: .3rem; white-space: nowrap; }
 .price-col .price--safe { color: var(--green-text); }
@@ -616,7 +594,6 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 .status-badge--green { background: var(--green-soft); color: var(--green-text); border-color: var(--green-border); }
 .status-badge--red   { background: var(--red-soft);   color: var(--red-text);   border-color: var(--red-border);   }
 
-/* ── Empty state ─────────────────────────────────────── */
 .empty-state {
   padding: 2.5rem 1.5rem;
   text-align: center;
@@ -638,12 +615,10 @@ input.input--error:focus, select.input--error:focus { border-color: var(--red); 
 
 .empty-state .empty-suggestions li::before { content: '→ '; color: var(--text-light); }
 
-/* ── Footer ──────────────────────────────────────────── */
 footer { background: var(--white); border-top: 1px solid var(--border); padding: .85rem 1.5rem; flex-shrink: 0; }
 footer .foot-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .35rem; }
 footer p { font-size: .72rem; color: var(--text-light); }
 
-/* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 768px) {
   .page-header      { display: none; }
   main              { padding: 1.25rem 1rem 2rem; }
