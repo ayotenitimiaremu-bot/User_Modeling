@@ -4,8 +4,7 @@ from typing import Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Resolve .env — sits one level above the project root (randoms/.env).
-_ENV_FILE = Path(__file__).resolve().parent.parent.parent / ".env"
+_ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 
 
 class Settings(BaseSettings):
