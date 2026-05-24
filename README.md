@@ -13,7 +13,7 @@ Given a `UserPersona` (age, occupation, Big Five personality, review history) an
 5. Calibrates the star rating against the persona's historical behaviour
 6. Updates the persona's inferred preferences after each review
 
-LLM calls go to **Groq** (`llama-3.3-70b-versatile` for reasoning/generation, `llama-3.1-8b-instant` for summaries). All runs are traced in **LangSmith**.
+LLM calls go to **Groq** (`openai/gpt-oss-120b` for reasoning/generation, `openai/gpt-oss-20b` for summaries). All runs are traced in **LangSmith**.
 
 ---
 
