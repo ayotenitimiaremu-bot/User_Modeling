@@ -2,8 +2,6 @@ const API_BASE    = 'http://localhost:8000';
 const RESULTS_KEY = 'smartbuyng_results';
 const QUERY_KEY   = 'smartbuyng_query';
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
 function formatNaira(amount) {
   if (!amount && amount !== 0) return '—';
   return '₦' + Number(amount).toLocaleString('en-NG');
@@ -32,8 +30,6 @@ function clearError() {
   if (box) box.classList.remove('visible');
 }
 
-// ── Platform badges ───────────────────────────────────────────────────────────
-
 const PLATFORM_STYLES = {
   jumia: { label: 'Official', color: '#15803d', bg: '#f0fdf4', border: '#86efac' },
   konga: { label: 'Konga',    color: '#1d4ed8', bg: '#eff6ff', border: '#93c5fd' },
@@ -47,8 +43,6 @@ function getPlatformBadge(name) {
   const s = PLATFORM_STYLES[match];
   return `<span class="platform-badge" style="color:${s.color};background:${s.bg};border-color:${s.border}">${s.label}</span>`;
 }
-
-// ── Trust indicator ───────────────────────────────────────────────────────────
 
 function buildTrustIndicator(score, type) {
   const fillClass = score >= 75 ? 'trust-fill--high' : score >= 45 ? 'trust-fill--mid' : 'trust-fill--low';
@@ -65,8 +59,6 @@ function buildTrustIndicator(score, type) {
       </div>
     </div>`;
 }
-
-// ── Card builders ─────────────────────────────────────────────────────────────
 
 function buildSafeCard(item) {
   const name  = item.name || item.title || item.platform || 'Product';
@@ -136,8 +128,6 @@ function buildScamCard(item) {
     </div>`;
 }
 
-// ── Card action handlers ──────────────────────────────────────────────────────
-
 function handleSave(btn) {
   btn.textContent = '✓ Saved';
   btn.disabled = true;
@@ -148,8 +138,6 @@ function handleReport(btn) {
   btn.textContent = '✓ Reported';
   btn.disabled = true;
 }
-
-// ── Price comparison ──────────────────────────────────────────────────────────
 
 function renderPriceComparison(data) {
   const el    = document.getElementById('priceComparison');
@@ -187,8 +175,6 @@ function renderPriceComparison(data) {
     </div>`;
 }
 
-// ── Results renderer ──────────────────────────────────────────────────────────
-
 function renderResults() {
   const raw      = sessionStorage.getItem(RESULTS_KEY);
   const queryRaw = sessionStorage.getItem(QUERY_KEY);
@@ -203,7 +189,6 @@ function renderResults() {
   if (title)    title.textContent    = `"${query.query || 'Search'}"`;
   if (subtitle) subtitle.textContent = `${query.location || ''} · ${formatNaira(query.budget_min)} – ${formatNaira(query.budget_max)}`;
 
-  // savings banner
   if (data.savings && data.savings > 0) {
     const banner = document.getElementById('savingsBanner');
     const amount = document.getElementById('savingsAmount');
@@ -216,7 +201,6 @@ function renderResults() {
   const safe  = data.safe_options  || [];
   const scams = data.scam_warnings || [];
 
-  // safe section
   const safeList  = document.getElementById('safeList');
   const safeCount = document.getElementById('safeCount');
   if (safeCount) safeCount.textContent = safe.length;
@@ -230,7 +214,6 @@ function renderResults() {
          </div>`;
   }
 
-  // scam section
   const scamList  = document.getElementById('scamList');
   const scamCount = document.getElementById('scamCount');
   if (scamCount) scamCount.textContent = scams.length;
@@ -244,7 +227,6 @@ function renderResults() {
          </div>`;
   }
 
-  // full empty state (nothing at all)
   if (!safe.length && !scams.length) {
     const safeEl = document.getElementById('safeList');
     if (safeEl) safeEl.innerHTML = `
@@ -261,8 +243,6 @@ function renderResults() {
   }
 }
 
-// ── Loading animation ─────────────────────────────────────────────────────────
-
 function runLoadingAnimation() {
   const steps = ['step-jumia', 'step-konga', 'step-jiji', 'step-scam'];
   const delays = [450, 900, 1350, 1750];
@@ -277,8 +257,6 @@ function runLoadingAnimation() {
     )
   ).then(() => new Promise(r => setTimeout(r, 300)));
 }
-
-// ── Search form ───────────────────────────────────────────────────────────────
 
 const form = document.getElementById('searchForm');
 
@@ -365,7 +343,6 @@ if (form) {
     const priorities = [...document.querySelectorAll('input[name="priorities"]:checked')].map(cb => cb.value);
     const payload  = { query, budget_min: rawMin, budget_max: rawMax, location, priorities };
 
-    // show loading overlay
     const overlay = document.getElementById('loadingOverlay');
     if (overlay) overlay.style.display = 'flex';
 
@@ -398,8 +375,6 @@ if (form) {
   });
 }
 
-// ── Share button ──────────────────────────────────────────────────────────────
-
 const shareBtn = document.getElementById('shareBtn');
 if (shareBtn) {
   shareBtn.addEventListener('click', async () => {
@@ -412,5 +387,4 @@ if (shareBtn) {
   });
 }
 
-// ── Auto-render on results page ───────────────────────────────────────────────
 if (document.getElementById('safeList')) renderResults();
