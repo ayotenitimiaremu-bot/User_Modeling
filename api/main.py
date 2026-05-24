@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes import router
 from config.settings import settings
@@ -22,6 +23,14 @@ pre-built personas from the Amazon Reviews 2023 dataset.
     version="1.0.0",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(router, prefix="/reviews")
 
 
@@ -32,6 +41,38 @@ def root() -> dict:
         "docs": "/docs",
         "sample_request": "/reviews/sample-request",
         "sample_personas": "/reviews/sample-personas",
+    }
+
+
+@app.post("/analyze-product")
+async def analyze_product(request: dict) -> dict:
+    return {
+        "safe_options": [
+            {
+                "platform": "Jumia",
+                "price": 285000,
+                "seller": "Jumia Official Store",
+                "trust_score": 95,
+                "location": "Lagos",
+                "delivery": "2-3 days",
+                "url": "https://jumia.com.ng"
+            }
+        ],
+        "scam_warnings": [
+            {
+                "platform": "Jiji",
+                "price": 120000,
+                "seller": "QuickDeals NG",
+                "trust_score": 24,
+                "warnings": [
+                    "Account created 3 days ago",
+                    "Price 58% below market average",
+                    "1 scam report on Nairaland"
+                ],
+                "location": "Unverified"
+            }
+        ],
+        "savings": 45000
     }
 
 
